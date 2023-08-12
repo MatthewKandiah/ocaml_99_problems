@@ -134,3 +134,29 @@ let%test "should be false for odd length non-palindrome" =
 let%test "should be false for even length non-palindrome" =
   not (is_palindrome_simple [ 1; 2; 1; 2 ])
 ;;
+
+(*problem 7 - flatten a list*)
+type 'a node =
+  | One of 'a
+  | Many of 'a node list
+
+let rec flatten (l : 'a node list) =
+  let rec aux list acc =
+    match list with
+    | [] -> rev acc
+    | One head :: tail -> aux tail (head :: acc)
+    | Many head_list :: tail ->
+      let flattened_head_list = flatten head_list in
+      aux tail (rev flattened_head_list @ acc)
+  in
+  aux l []
+;;
+
+let%test "should return trivial flat list" =
+  flatten [ One "a"; One "b"; One "c" ] = [ "a"; "b"; "c" ]
+;;
+
+let%test "should return flattened list" =
+  flatten [ One "a"; Many [ One "b"; Many [ One "c"; One "d" ]; One "e" ] ]
+  = [ "a"; "b"; "c"; "d"; "e" ]
+;;
