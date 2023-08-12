@@ -160,3 +160,23 @@ let%test "should return flattened list" =
   flatten [ One "a"; Many [ One "b"; Many [ One "c"; One "d" ]; One "e" ] ]
   = [ "a"; "b"; "c"; "d"; "e" ]
 ;;
+
+(*problem 7 without needing two recursive functions*)
+(*neater way of doing the same thing I was doing, the inner aux call on the head list will generate our reverse-order flattened list, avoiding the repeated reverses my method required!*)
+let flatten_better list =
+  let rec aux acc = function
+    | [] -> acc
+    | One x :: t -> aux (x :: acc) t
+    | Many l :: t -> aux (aux acc l) t
+  in
+  rev (aux [] list)
+;;
+
+let%test "should return trivial flat list" =
+  flatten_better [ One "a"; One "b"; One "c" ] = [ "a"; "b"; "c" ]
+;;
+
+let%test "should return flattened list" =
+  flatten_better [ One "a"; Many [ One "b"; Many [ One "c"; One "d" ]; One "e" ] ]
+  = [ "a"; "b"; "c"; "d"; "e" ]
+;;
