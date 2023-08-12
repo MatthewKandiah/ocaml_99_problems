@@ -199,3 +199,16 @@ let%test "should return list without consecutive duplicates" =
   compress [ "a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e" ]
   = [ "a"; "b"; "c"; "a"; "d"; "e" ]
 ;;
+
+(*problem 8 - nice syntax to do the same thing*)
+(*neat, you can destructure the head off multiple times, then use `as` to still refer to the whole tail*)
+(*no need to explicitly pass in the comparison element, we just inspect elements in pairs*)
+let rec compress2 = function
+  | a :: (b :: _ as t) -> if a = b then compress2 t else a :: compress t
+  | smaller -> smaller
+;;
+
+let%test "should return list without consecutive duplicates" =
+  compress2 [ "a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e" ]
+  = [ "a"; "b"; "c"; "a"; "d"; "e" ]
+;;
