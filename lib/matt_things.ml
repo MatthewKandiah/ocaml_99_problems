@@ -113,3 +113,24 @@ let%test "should be false for odd length non-palindrome" =
 let%test "should be false for even length non-palindrome" =
   not (is_palindrome [ 1; 2; 1; 2 ])
 ;;
+
+(*problem 6 - without overcomplicating it!*)
+let is_palindrome_simple list = list = rev list
+
+let%test "should be true for odd length palindrome" =
+  is_palindrome_simple [ 1; 2; 3; 4; 3; 2; 1 ]
+;;
+
+let%test "should be true for even length palindrom" =
+  is_palindrome_simple [ 1; 2; 3; 3; 2; 1 ]
+;;
+
+let%test "should be true for empty" = is_palindrome_simple []
+
+let%test "should be false for odd length non-palindrome" =
+  not (is_palindrome_simple [ 1; 2; 3; 1; 2; 3; 4 ])
+;;
+
+let%test "should be false for even length non-palindrome" =
+  not (is_palindrome_simple [ 1; 2; 1; 2 ])
+;;
