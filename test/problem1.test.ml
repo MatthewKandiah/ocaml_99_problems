@@ -2,4 +2,5 @@
 (* - : string option = Some "d" *)
 (* # last [];; *)
 (* - : 'a option = None *)
-let%test _ = true 
+let%test "should pass" = true
+let%test "should fail" = false
