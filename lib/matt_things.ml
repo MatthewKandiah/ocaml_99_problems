@@ -180,3 +180,4 @@ let%test "should return flattened list" =
   flatten_better [ One "a"; Many [ One "b"; Many [ One "c"; One "d" ]; One "e" ] ]
   = [ "a"; "b"; "c"; "d"; "e" ]
 ;;
+
