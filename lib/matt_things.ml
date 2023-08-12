@@ -212,3 +212,36 @@ let%test "should return list without consecutive duplicates" =
   compress2 [ "a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e" ]
   = [ "a"; "b"; "c"; "a"; "d"; "e" ]
 ;;
+
+(*problem 9 - pack consecutive duplicates*)
+let pack list =
+  let rec aux (cmp : 'a option) (tmp : 'a list) (acc : 'a list list) (ls : 'a list) =
+    match ls with
+    | [] -> if tmp = [] then acc else acc @ [ tmp ]
+    | head :: tail ->
+      (match cmp with
+       | None -> aux (Some head) [ head ] acc tail
+       | Some x ->
+         if head = x
+         then aux cmp (head :: tmp) acc tail
+         else aux (Some head) [ head ] (acc @ [ tmp ]) tail)
+  in
+  aux None [] [] list
+;;
+
+let%test "should pack consecutive values into sublists" =
+  pack [ "a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "d"; "e"; "e"; "e"; "e" ]
+  = [ [ "a"; "a"; "a"; "a" ]
+    ; [ "b" ]
+    ; [ "c"; "c" ]
+    ; [ "a"; "a" ]
+    ; [ "d"; "d" ]
+    ; [ "e"; "e"; "e"; "e" ]
+    ]
+;;
+
+let%test "should handle trivial case" =
+  pack [ 1; 2; 3; 4; 5 ] = [ [ 1 ]; [ 2 ]; [ 3 ]; [ 4 ]; [ 5 ] ]
+;;
+
+let%test "should handle empty list" = pack [] = []
