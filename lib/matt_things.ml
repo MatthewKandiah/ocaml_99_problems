@@ -245,3 +245,31 @@ let%test "should handle trivial case" =
 ;;
 
 let%test "should handle empty list" = pack [] = []
+
+(*problem 9 - their solution*)
+(*very neat, same trick destructuring out two head values while still getting the whole tail*)
+(*think I need some practice thinking about adding lists to lists of lists in the same way as adding a value to a list*)
+let pack2 list =
+  let rec aux current acc = function
+    | [] -> []
+    | [ x ] -> (x :: current) :: acc
+    | a :: (b :: _ as t) ->
+      if a = b then aux (a :: current) acc t else aux [] ((a :: current) :: acc) t
+  in
+  rev (aux [] [] list)
+;;
+
+let%test "should pack consecutive values into sublists" =
+  pack2 [ "a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "d"; "e"; "e"; "e"; "e" ]
+  = [ [ "a"; "a"; "a"; "a" ]
+    ; [ "b" ]
+    ; [ "c"; "c" ]
+    ; [ "a"; "a" ]
+    ; [ "d"; "d" ]
+    ; [ "e"; "e"; "e"; "e" ]
+    ]
+;;
+
+let%test "should handle trivial case" =
+  pack2 [ 1; 2; 3; 4; 5 ] = [ [ 1 ]; [ 2 ]; [ 3 ]; [ 4 ]; [ 5 ] ]
+;;
