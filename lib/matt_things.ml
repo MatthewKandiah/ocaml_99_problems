@@ -59,3 +59,30 @@ let length_tail_rec l =
 
 let%test "should return length of list" = length_tail_rec [ 0; 1; 2 ] = 3
 let%test "should return length of empty list" = length_tail_rec [] = 0
+
+(*problem 5*)
+let rev l =
+  let rec go ls acc =
+    match ls with
+    | [] -> acc
+    | x :: tail -> go tail (x :: acc)
+  in
+  go l []
+;;
+
+let%test "should reverse int list" = rev [ 1; 2; 3; 4 ] = [ 4; 3; 2; 1 ]
+let%test "should reverse char list" = rev [ 'a'; 'b'; 'c' ] = [ 'c'; 'b'; 'a' ]
+let%test "should handle empty string" = rev [] = []
+
+(*problem 5 using function pattern matching syntax*)
+let rev2 l =
+  let rec go acc = function
+    | [] -> acc
+    | x :: tail -> go (x :: acc) tail
+  in
+  go [] l
+;;
+
+let%test "should reverse int list" = rev2 [ 1; 2; 3; 4 ] = [ 4; 3; 2; 1 ]
+let%test "should reverse char list" = rev2 [ 'a'; 'b'; 'c' ] = [ 'c'; 'b'; 'a' ]
+let%test "should handle empty string" = rev2 [] = []
