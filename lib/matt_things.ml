@@ -86,3 +86,30 @@ let rev2 l =
 let%test "should reverse int list" = rev2 [ 1; 2; 3; 4 ] = [ 4; 3; 2; 1 ]
 let%test "should reverse char list" = rev2 [ 'a'; 'b'; 'c' ] = [ 'c'; 'b'; 'a' ]
 let%test "should handle empty string" = rev2 [] = []
+
+(*problem 6*)
+let is_palindrome list =
+  let list_rev = rev list in
+  let rec lists_equal list1 list2 =
+    match list1, list2 with
+    | [], [] -> true
+    | _, [] | [], _ -> false
+    | h1 :: tail1, h2 :: tail2 -> if h1 = h2 then lists_equal tail1 tail2 else false
+  in
+  lists_equal list list_rev
+;;
+
+let%test "should be true for odd length palindrome" =
+  is_palindrome [ 1; 2; 3; 4; 3; 2; 1 ]
+;;
+
+let%test "should be true for even length palindrom" = is_palindrome [ 1; 2; 3; 3; 2; 1 ]
+let%test "should be true for empty" = is_palindrome []
+
+let%test "should be false for odd length non-palindrome" =
+  not (is_palindrome [ 1; 2; 3; 1; 2; 3; 4 ])
+;;
+
+let%test "should be false for even length non-palindrome" =
+  not (is_palindrome [ 1; 2; 1; 2 ])
+;;
