@@ -181,3 +181,21 @@ let%test "should return flattened list" =
   = [ "a"; "b"; "c"; "d"; "e" ]
 ;;
 
+(*problem 8 - eliminate duplicates*)
+let compress list =
+  let rec aux (cmp : 'a option) (acc : 'a list) (l : 'a list) =
+    match l with
+    | [] -> acc
+    | head :: tail ->
+      (match cmp with
+       | None -> aux (Some head) (head :: acc) tail
+       | Some x ->
+         if head != x then aux (Some head) (head :: acc) tail else aux cmp acc tail)
+  in
+  rev (aux None [] list)
+;;
+
+let%test "should return list without consecutive duplicates" =
+  compress [ "a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e" ]
+  = [ "a"; "b"; "c"; "a"; "d"; "e" ]
+;;
