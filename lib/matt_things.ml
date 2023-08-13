@@ -273,3 +273,35 @@ let%test "should pack consecutive values into sublists" =
 let%test "should handle trivial case" =
   pack2 [ 1; 2; 3; 4; 5 ] = [ [ 1 ]; [ 2 ]; [ 3 ]; [ 4 ]; [ 5 ] ]
 ;;
+
+(*problem 10 - run length encoding*)
+let encode list =
+  let packed_list = pack list in
+  let rec aux acc = function
+    | [] -> acc
+    | [] :: _ -> raise (Arg.Bad "packed_list contains empty list")
+    | (a :: _ as head) :: tail -> aux ((length head, a) :: acc) tail
+  in
+  aux [] packed_list |> rev
+;;
+
+let%test "should perform run length encoding" =
+  encode [ "a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e" ]
+  = [ 4, "a"; 1, "b"; 2, "c"; 2, "a"; 1, "d"; 4, "e" ]
+;;
+
+(*problem 10 - their solution, neater to just do it directly*)
+let encode2 list =
+  let rec aux count acc = function
+    | [] -> []
+    | [ x ] -> (count + 1, x) :: acc
+    | a :: (b :: _ as t) ->
+      if a = b then aux (count + 1) acc t else aux 0 ((count + 1, a) :: acc) t
+  in
+  aux 0 [] list |> rev
+;;
+
+let%test "should perform run length encoding" =
+  encode2 [ "a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e" ]
+  = [ 4, "a"; 1, "b"; 2, "c"; 2, "a"; 1, "d"; 4, "e" ]
+;;
