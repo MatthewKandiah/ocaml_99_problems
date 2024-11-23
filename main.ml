@@ -120,6 +120,7 @@ assert (flatten [One "a"; Many [One "b"; Many [One "c"; One "d"]; One "e"]] = ["
 (*
   Problem 8 - Eliminate Duplicates
 *)
+
 let compress lst = 
   let rec compress_aux acc = function
   | [] -> acc
@@ -133,6 +134,27 @@ assert (compress [1; 1; 1;] = [1]);;
 assert (compress ["a"; "a"; "b"] = ["a"; "b"]);;
 assert (compress ["a"; "a"; "a"; "b"; "c"; "c"; "c"; "c"; "c"; "b"; "b"; "e"; "e"; "e"; "e"; "e"; "e"; "e"] = ["a"; "b"; "c"; "b"; "e"]);;
 
+(*
+  Problem 10 - Run-Length Encoding
+*)
+
+let encode lst =
+  let rec encode_aux l acc = match l, acc with
+  | [], _ -> acc
+  | h :: t, [] -> encode_aux t [(1, h)]
+  | h :: t, (cnt_h, char_h) :: acc_t -> if h = char_h then encode_aux t ((cnt_h + 1, char_h) :: acc_t) else encode_aux t ((1, h) :: acc)
+  in rev (encode_aux lst []);;
+  
+assert (encode [] = []);;
+assert (encode ["a"] = [(1, "a")]);;
+assert (encode ["a"; "a"] = [(2, "a")]);;
+assert (encode ["a"; "b"] = [(1, "a"); (1, "b")]);;
+assert (encode ["a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e"] = [(4, "a"); (1, "b"); (2, "c"); (2, "a"); (1, "d"); (4, "e")]);;
+
+(*
+	Problem 9 - Pack consecutive duplicates
+*)
+
 let times count x =
   let rec times_aux n acc = match n with
     | 0 -> acc
@@ -142,4 +164,17 @@ let times count x =
 assert (times 0 "a" = []);;
 assert (times 1 "a" = ["a"]);;
 assert (times 5 "a" = ["a"; "a"; "a"; "a"; "a" ]);;
+
+let pack lst =
+	let rec encoded_to_packed l = match l with
+		| [] -> []
+		| (h_cnt, h_char) :: t -> (times h_cnt h_char) :: (encoded_to_packed t)
+	in encoded_to_packed (encode lst);;
+
+assert (pack [] = []);;
+assert (pack ["a"] = [["a"]]);;
+assert (pack ["a"; "b"] = [["a"]; ["b"]]);;
+assert (pack ["a"; "a"] = [["a"; "a"]]);;
+assert (pack ["a"; "a"; "b"; "c"; "c"; "c"] = [["a"; "a"]; ["b"]; ["c"; "c"; "c"]]);;
+assert (pack ["a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "d"; "e"; "e"; "e"; "e"] = [["a"; "a"; "a"; "a"]; ["b"]; ["c"; "c"]; ["a"; "a"]; ["d"; "d"];["e"; "e"; "e"; "e"]]);;
 
