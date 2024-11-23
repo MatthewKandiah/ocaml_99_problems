@@ -193,7 +193,7 @@ let encode2 lst =
   | h :: t, (One char) :: acc_t -> if h = char then encode2_aux t (Many (2, char) :: acc_t) else encode2_aux t (One h :: acc)
   | h :: t, Many (cnt_h, char_h) :: acc_t -> if h = char_h then encode2_aux t (Many(cnt_h + 1, char_h) :: acc_t) else encode2_aux t (One h :: acc)
   in rev (encode2_aux lst []);;
-  
+
 assert (encode2 [] = []);;
 assert (encode2 ["a"] = [One "a"]);;
 assert (encode2 ["a"; "a"] = [Many (2, "a")]);;
@@ -201,3 +201,22 @@ assert (encode2 ["a"; "b"] = [One "a"; One "b"]);;
 assert (encode2 ["a"; "b"; "b"] = [One "a"; Many (2, "b")]);;
 assert (encode2 ["a"; "a"; "b"] = [Many (2, "a"); One "b"]);;
 assert (encode2 ["a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e"] = [Many (4, "a"); One "b"; Many (2, "c"); Many (2, "a"); One "d"; Many (4, "e")]);;
+
+(*
+	Problem 12 - Decode Run-Length Encoded List (assuming style from Problem 11)
+*)
+let decode lst =
+  let rec decode_aux acc = function
+  | [] -> rev acc
+  | One c :: t -> decode_aux (c :: acc) t
+  | Many (cnt, char) :: t -> decode_aux ((times cnt char) @ acc) t
+  in decode_aux [] lst;;
+
+assert ([] = decode []);;
+assert (["a"] = decode [One "a"]);;
+assert (["a"; "a"] = decode [Many (2, "a")]);;
+assert (["a"; "b"] = decode [One "a"; One "b"]);;
+assert (["a"; "b"; "b"] = decode [One "a"; Many (2, "b")]);;
+assert (["a"; "a"; "b"] = decode [Many (2, "a"); One "b"]);;
+assert (["a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e"] = decode [Many (4, "a"); One "b"; Many (2, "c"); Many (2, "a"); One "d"; Many (4, "e")]);;
+
