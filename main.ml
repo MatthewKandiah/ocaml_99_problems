@@ -178,3 +178,26 @@ assert (pack ["a"; "a"] = [["a"; "a"]]);;
 assert (pack ["a"; "a"; "b"; "c"; "c"; "c"] = [["a"; "a"]; ["b"]; ["c"; "c"; "c"]]);;
 assert (pack ["a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "d"; "e"; "e"; "e"; "e"] = [["a"; "a"; "a"; "a"]; ["b"]; ["c"; "c"]; ["a"; "a"]; ["d"; "d"];["e"; "e"; "e"; "e"]]);;
 
+(*
+  Problem 11 - Modified Run-Length Encoding
+*)
+
+type 'a rle =
+  | One of 'a
+  | Many of int * 'a
+
+let encode2 lst =
+  let rec encode2_aux l acc = match l, acc with
+  | [], _ -> acc
+  | h :: t, [] -> encode2_aux t [One h]
+  | h :: t, (One char) :: acc_t -> if h = char then encode2_aux t (Many (2, char) :: acc_t) else encode2_aux t (One h :: acc)
+  | h :: t, Many (cnt_h, char_h) :: acc_t -> if h = char_h then encode2_aux t (Many(cnt_h + 1, char_h) :: acc_t) else encode2_aux t (One h :: acc)
+  in rev (encode2_aux lst []);;
+  
+assert (encode2 [] = []);;
+assert (encode2 ["a"] = [One "a"]);;
+assert (encode2 ["a"; "a"] = [Many (2, "a")]);;
+assert (encode2 ["a"; "b"] = [One "a"; One "b"]);;
+assert (encode2 ["a"; "b"; "b"] = [One "a"; Many (2, "b")]);;
+assert (encode2 ["a"; "a"; "b"] = [Many (2, "a"); One "b"]);;
+assert (encode2 ["a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e"] = [Many (4, "a"); One "b"; Many (2, "c"); Many (2, "a"); One "d"; Many (4, "e")]);;
