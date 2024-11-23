@@ -95,3 +95,25 @@ let is_palindrome lst =
 assert (is_palindrome ["x"; "a"; "m"; "a"; "x"] = true);;
 assert (is_palindrome ["x"; "a"; "a"; "x"] = true);;
 assert (is_palindrome [1; 2] = false);;
+
+(*
+  Problem 7 - Flatten a list
+*)
+
+type 'a node = 
+  | One of 'a
+  | Many of 'a node list
+
+let flatten lst =
+  let rec flatten_aux i o = 
+  match i with
+    | [] -> o
+    | One x :: rest -> flatten_aux rest (x :: o)
+    | Many inner_list :: rest -> flatten_aux rest ((flatten_aux inner_list o))
+  in rev (flatten_aux lst []);;
+
+assert (flatten [] = []);;
+assert (flatten [One 1; One 2; One 3] = [1; 2; 3]);;
+assert (flatten [One 1; Many [One 1; One 2; One 3]] = [1; 1; 2; 3]);;
+assert (flatten [One "a"; Many [One "b"; Many [One "c"; One "d"]; One "e"]] = ["a"; "b"; "c"; "d"; "e"]);
+
