@@ -85,3 +85,13 @@ assert (rev [1] = [1]);;
 assert (rev [1; 2] = [2; 1]);;
 assert (rev [1; 2; 3; 4] = [4; 3; 2; 1]);;
 
+(*
+  Problem 6 - Palindrome
+*)
+
+let is_palindrome lst = 
+  lst = (rev lst);;
+
+assert (is_palindrome ["x"; "a"; "m"; "a"; "x"] = true);;
+assert (is_palindrome ["x"; "a"; "a"; "x"] = true);;
+assert (is_palindrome [1; 2] = false);;
