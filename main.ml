@@ -115,5 +115,31 @@ let flatten lst =
 assert (flatten [] = []);;
 assert (flatten [One 1; One 2; One 3] = [1; 2; 3]);;
 assert (flatten [One 1; Many [One 1; One 2; One 3]] = [1; 1; 2; 3]);;
-assert (flatten [One "a"; Many [One "b"; Many [One "c"; One "d"]; One "e"]] = ["a"; "b"; "c"; "d"; "e"]);
+assert (flatten [One "a"; Many [One "b"; Many [One "c"; One "d"]; One "e"]] = ["a"; "b"; "c"; "d"; "e"]);;
+
+(*
+  Problem 8 - Eliminate Duplicates
+*)
+let compress lst = 
+  let rec compress_aux acc = function
+  | [] -> acc
+  | [x] -> x :: acc
+  | h :: (th :: _ as t) -> if h = th then compress_aux acc t else compress_aux (h :: acc) t
+  in rev (compress_aux [] lst);;
+
+assert (compress [] = []);;
+assert (compress [1] = [1]);;
+assert (compress [1; 1; 1;] = [1]);;
+assert (compress ["a"; "a"; "b"] = ["a"; "b"]);;
+assert (compress ["a"; "a"; "a"; "b"; "c"; "c"; "c"; "c"; "c"; "b"; "b"; "e"; "e"; "e"; "e"; "e"; "e"; "e"] = ["a"; "b"; "c"; "b"; "e"]);;
+
+let times count x =
+  let rec times_aux n acc = match n with
+    | 0 -> acc
+    | m -> times_aux (m-1) (x :: acc)
+  in times_aux count [];;
+
+assert (times 0 "a" = []);;
+assert (times 1 "a" = ["a"]);;
+assert (times 5 "a" = ["a"; "a"; "a"; "a"; "a" ]);;
 
