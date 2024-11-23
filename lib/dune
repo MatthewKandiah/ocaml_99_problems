@@ -1,5 +1,0 @@
-(library
- (name ocaml_99_problems)
- (inline_tests)
- (preprocess (pps ppx_inline_test))
- )
