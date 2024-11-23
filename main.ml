@@ -61,3 +61,27 @@ assert (length [] = 0);;
 assert (length [1] = 1);;
 assert (length [1; 2; 3] = 3)
 
+(*
+  Problem 5 - Reverse a list
+*)
+
+let rev lst =
+  let rec rev_aux l r = match l with
+    | [] -> r
+    | head :: rest -> rev_aux rest (head :: r)
+  in
+  rev_aux lst [];;
+
+(*
+  l = [1 2 3 4]; r = [] START
+  l = [2 3 4];  r = [1]
+  l = [3 4];  r = [2 1]
+  l = [4];  r = [3 2 1]
+  l = []; r = [4 3 2 1] DONE
+*)
+
+assert (rev [] = []);;
+assert (rev [1] = [1]);;
+assert (rev [1; 2] = [2; 1]);;
+assert (rev [1; 2; 3; 4] = [4; 3; 2; 1]);;
+
