@@ -45,3 +45,19 @@ assert (nth ["a"; "b"; "c"; "d"; "e"] 4 = Some "e");;
 assert (nth ["a"; "b"; "c"; "d"; "e"] 5 = None);;
 assert (nth [] 0 = None);;
 assert (nth [] 5 = None);;
+
+(*
+  Problem 4 - Length of a list
+*)
+
+let length lst =
+  let rec length_aux l n = match l with
+    | [] -> n
+    | _ :: rest -> length_aux rest (n + 1)
+  in
+  length_aux lst 0;;
+
+assert (length [] = 0);;
+assert (length [1] = 1);;
+assert (length [1; 2; 3] = 3)
+
