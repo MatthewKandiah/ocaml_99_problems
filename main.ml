@@ -220,3 +220,35 @@ assert (["a"; "b"; "b"] = decode [One "a"; Many (2, "b")]);;
 assert (["a"; "a"; "b"] = decode [Many (2, "a"); One "b"]);;
 assert (["a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e"] = decode [Many (4, "a"); One "b"; Many (2, "c"); Many (2, "a"); One "d"; Many (4, "e")]);;
 
+(*
+  Problem 13 - Direct Run-Length Encoding of a List
+*)
+
+let count_and_take char lst =
+  let rec aux count = function
+    | [] -> (count, [])
+    | h :: t -> if h = char then aux (count + 1) t else (count, h :: t)
+  in
+  aux 0 lst;;
+
+assert (count_and_take 1 [] = (0, []));;
+assert (count_and_take 1 [1; 1; 1] = (3, []));;
+assert (count_and_take 1 [1; 1; 1; 2; 3] = (3, [2; 3]));;
+assert (count_and_take 1 [1; 1; 1; 2; 1; 1; 1; 3] = (3, [2; 1; 1; 1; 3]));;
+
+let direct_encode lst =
+  let rec aux acc = function
+  | [] -> rev acc
+  | h :: t as l -> match (count_and_take h l) with 
+    | (1, rest) -> aux (One h :: acc) rest
+    | (n, rest) -> aux (Many (n, h) :: acc) rest
+  in aux [] lst;;
+
+assert (direct_encode [] = []);;
+assert (direct_encode ["a"] = [One "a"]);;
+assert (direct_encode ["a"; "a"] = [Many (2, "a")]);;
+assert (direct_encode ["a"; "b"] = [One "a"; One "b"]);;
+assert (direct_encode ["a"; "b"; "b"] = [One "a"; Many (2, "b")]);;
+assert (direct_encode ["a"; "a"; "b"] = [Many (2, "a"); One "b"]);;
+assert (direct_encode ["a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e"] = [Many (4, "a"); One "b"; Many (2, "c"); Many (2, "a"); One "d"; Many (4, "e")]);;
+
