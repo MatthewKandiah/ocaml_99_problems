@@ -398,9 +398,9 @@ assert (
 let split lst num =
   let rec aux acc cnt = function
     | [] -> rev acc, []
-    | h :: t -> if cnt = 0 then rev (h :: acc), t else (aux (h :: acc) (cnt - 1)) t
+    | h :: t as l-> if cnt = 0 then rev acc, l else (aux (h :: acc) (cnt - 1)) t
   in
-  aux [] (num - 1) lst
+  aux [] num lst
 ;;
 
 assert (split [ "a"; "b"; "c"; "d" ] 5 = ([ "a"; "b"; "c"; "d" ], []));;
