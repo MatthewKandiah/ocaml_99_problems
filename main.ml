@@ -341,17 +341,36 @@ assert (
   = [ Many (4, "a"); One "b"; Many (2, "c"); Many (2, "a"); One "d"; Many (4, "e") ])
 
 (*
-  Problem 14 - Duplicate the Elements of a List
+   Problem 14 - Duplicate the Elements of a List
 *)
 
-let duplicate lst = 
+let duplicate lst =
   let rec aux acc = function
     | [] -> rev acc
     | h :: t -> aux (h :: h :: acc) t
   in
-  aux [] lst;;
+  aux [] lst
+;;
 
 assert (duplicate [] = []);;
-assert (duplicate [1] = [1; 1]);;
-assert (duplicate ["a"; "b"; "b"; "c"] = ["a"; "a"; "b"; "b"; "b"; "b"; "c"; "c"]);;
+assert (duplicate [ 1 ] = [ 1; 1 ]);;
+assert (duplicate [ "a"; "b"; "b"; "c" ] = [ "a"; "a"; "b"; "b"; "b"; "b"; "c"; "c" ])
 
+(*
+   Problem 15 - Replicate the Elements of a List a given number of times
+*)
+
+let replicate lst num =
+  let rec aux acc = function
+    | [] -> rev acc
+    | h :: t -> aux (times num h @ acc) t
+  in
+  aux [] lst
+;;
+
+assert (replicate [] 1 = []);;
+assert (replicate [] 5 = []);;
+assert (replicate [ 1 ] 3 = [ 1; 1; 1 ]);;
+assert (replicate [ "a"; "b" ] 1 = [ "a"; "b" ]);;
+assert (replicate [ "a"; "b" ] 2 = [ "a"; "a"; "b"; "b" ]);;
+assert (replicate [ "a"; "b"; "c" ] 3 = [ "a"; "a"; "a"; "b"; "b"; "b"; "c"; "c"; "c" ])
