@@ -376,7 +376,7 @@ assert (replicate ["a"; "b"] 2 = ["a"; "a"; "b"; "b"]);;
 assert (replicate ["a"; "b"; "c"] 3 = ["a"; "a"; "a"; "b"; "b"; "b"; "c"; "c"; "c"]);;
 
 (*
-  Drop Every N-th Element from a List
+  Problem 16 - Drop Every N-th Element from a List
 *)
 
 let drop lst num =
