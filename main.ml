@@ -341,50 +341,70 @@ assert (
   = [ Many (4, "a"); One "b"; Many (2, "c"); Many (2, "a"); One "d"; Many (4, "e") ])
 
 (*
-  Problem 14 - Duplicate the Elements of a List
+   Problem 14 - Duplicate the Elements of a List
 *)
 
-let duplicate lst = 
+let duplicate lst =
   let rec aux acc = function
     | [] -> rev acc
     | h :: t -> aux (h :: h :: acc) t
   in
-  aux [] lst;;
+  aux [] lst
+;;
 
 assert (duplicate [] = []);;
-assert (duplicate [1] = [1; 1]);;
-assert (duplicate ["a"; "b"; "b"; "c"] = ["a"; "a"; "b"; "b"; "b"; "b"; "c"; "c"]);;
-
+assert (duplicate [ 1 ] = [ 1; 1 ]);;
+assert (duplicate [ "a"; "b"; "b"; "c" ] = [ "a"; "a"; "b"; "b"; "b"; "b"; "c"; "c" ])
 
 (*
-  Problem 15 - Replicate the Elements of a List a given number of times
+   Problem 15 - Replicate the Elements of a List a given number of times
 *)
 
-
-let replicate lst num = 
+let replicate lst num =
   let rec aux acc = function
     | [] -> rev acc
-    | h :: t -> aux ((times num h) @ acc) t
+    | h :: t -> aux (times num h @ acc) t
   in
-  aux [] lst;;
+  aux [] lst
+;;
 
 assert (replicate [] 1 = []);;
 assert (replicate [] 5 = []);;
-assert (replicate [1] 3 = [1; 1; 1]);;
-assert (replicate ["a"; "b"] 1 = ["a"; "b"]);;
-assert (replicate ["a"; "b"] 2 = ["a"; "a"; "b"; "b"]);;
-assert (replicate ["a"; "b"; "c"] 3 = ["a"; "a"; "a"; "b"; "b"; "b"; "c"; "c"; "c"]);;
+assert (replicate [ 1 ] 3 = [ 1; 1; 1 ]);;
+assert (replicate [ "a"; "b" ] 1 = [ "a"; "b" ]);;
+assert (replicate [ "a"; "b" ] 2 = [ "a"; "a"; "b"; "b" ]);;
+assert (replicate [ "a"; "b"; "c" ] 3 = [ "a"; "a"; "a"; "b"; "b"; "b"; "c"; "c"; "c" ])
 
 (*
-  Problem 16 - Drop Every N-th Element from a List
+   Problem 16 - Drop Every N-th Element from a List
 *)
 
 let drop lst num =
   let rec aux acc cnt = function
     | [] -> rev acc
-    | h :: t -> if cnt = num then (aux acc 1 t) else aux (h :: acc) (cnt + 1) t
+    | h :: t -> if cnt = num then aux acc 1 t else aux (h :: acc) (cnt + 1) t
   in
-  aux [] 1 lst;;
+  aux [] 1 lst
+;;
 
-assert (drop ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"; "i"; "j"] 3 = ["a"; "b"; "d"; "e"; "g"; "h"; "j"]);;
+assert (
+  drop [ "a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"; "i"; "j" ] 3
+  = [ "a"; "b"; "d"; "e"; "g"; "h"; "j" ])
 
+(*
+   Problem 17 - Split a List into 2 parts; the length of the first part is given
+*)
+
+let split lst num =
+  let rec aux acc cnt = function
+    | [] -> rev acc, []
+    | h :: t -> if cnt = 0 then rev (h :: acc), t else (aux (h :: acc) (cnt - 1)) t
+  in
+  aux [] (num - 1) lst
+;;
+
+assert (split [ "a"; "b"; "c"; "d" ] 5 = ([ "a"; "b"; "c"; "d" ], []));;
+
+assert (
+  split [ "a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"; "i"; "j" ] 3
+  = ([ "a"; "b"; "c" ], [ "d"; "e"; "f"; "g"; "h"; "i"; "j" ]))
