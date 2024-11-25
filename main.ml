@@ -339,3 +339,19 @@ assert (direct_encode [ "a"; "a"; "b" ] = [ Many (2, "a"); One "b" ]);;
 assert (
   direct_encode [ "a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e" ]
   = [ Many (4, "a"); One "b"; Many (2, "c"); Many (2, "a"); One "d"; Many (4, "e") ])
+
+(*
+  Problem 14 - Duplicate the Elements of a List
+*)
+
+let duplicate lst = 
+  let rec aux acc = function
+    | [] -> rev acc
+    | h :: t -> aux (h :: h :: acc) t
+  in
+  aux [] lst;;
+
+assert (duplicate [] = []);;
+assert (duplicate [1] = [1; 1]);;
+assert (duplicate ["a"; "b"; "b"; "c"] = ["a"; "a"; "b"; "b"; "b"; "b"; "c"; "c"]);;
+
