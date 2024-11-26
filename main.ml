@@ -424,3 +424,15 @@ assert (slice [] 100 101 = []);;
 assert (slice ["a"; "b"] 0 0 = ["a"]);;
 assert (slice ["a"; "b"] 1 1 = ["b"]);;
 assert (slice ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"; "i"; "j"] 2 6 = ["c"; "d"; "e"; "f"; "g"]);;
+
+(*
+  Problem 19 - Rotate a List N Places to the Left
+*)
+
+let rec rotate lst n = if n = 0 then lst else match lst with
+  | [] -> []
+  | h :: t -> rotate (t @ [h]) (n - 1);;
+
+assert (rotate [] 5 = []);;
+assert (rotate ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"] 3 = ["d"; "e"; "f"; "g"; "h"; "a"; "b"; "c"]);;
+assert (rotate ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"] 11 = ["d"; "e"; "f"; "g"; "h"; "a"; "b"; "c"]);;
