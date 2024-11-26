@@ -407,4 +407,20 @@ assert (split [ "a"; "b"; "c"; "d" ] 5 = ([ "a"; "b"; "c"; "d" ], []));;
 
 assert (
   split [ "a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"; "i"; "j" ] 3
-  = ([ "a"; "b"; "c" ], [ "d"; "e"; "f"; "g"; "h"; "i"; "j" ]))
+  = ([ "a"; "b"; "c" ], [ "d"; "e"; "f"; "g"; "h"; "i"; "j" ]));;
+
+(*
+  Problem 18 - Extract a Slice from a List
+*)
+
+let slice lst start finish =
+  let rec aux acc x y = function
+    | [] -> rev acc
+    | h :: t -> if (x <= 0 && y >= 0) then aux (h :: acc) (x-1) (y-1) t else aux acc (x-1) (y-1) t
+  in
+  aux [] start finish lst;;
+
+assert (slice [] 100 101 = []);;
+assert (slice ["a"; "b"] 0 0 = ["a"]);;
+assert (slice ["a"; "b"] 1 1 = ["b"]);;
+assert (slice ["a"; "b"; "c"; "d"; "e"; "f"; "g"; "h"; "i"; "j"] 2 6 = ["c"; "d"; "e"; "f"; "g"]);;
